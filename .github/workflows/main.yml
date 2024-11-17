@@ -30,3 +30,17 @@ jobs:
         port: ${{ secrets.PORT }}
         source: ./
         target: /home/ubuntu
+    - name: Copy file from /home/ubuntu to Var folder to the server
+      uses: appleboy/ssh-action@v1.1.0
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        script: |
+          sudo apt update -y
+          sudo apt install nginx -y
+          sudo systemctl start nginx
+          sudo rm -rf /var/www/html/index*
+          sudo cp -rf /home/ubuntu/index.html /var/www/html
+        
